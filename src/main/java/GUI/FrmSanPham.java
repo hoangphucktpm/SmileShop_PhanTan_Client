@@ -2,7 +2,6 @@ package GUI;
 
 //import DAO.KhuyenMai_Dao;
 
-import DAO.SanPham_Dao;
 import DAOTest.KhuyenMaiDao;
 import DAOTest.NhaCungCapDao;
 import DAOTest.SanPhamDao;
@@ -94,7 +93,6 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
     private boolean chkThem = false;
     private boolean chkSua = false;
     private List<String> listTimNCC = new ArrayList<>();
-    private SanPham_Dao dao = new SanPham_Dao();
 //	private KhuyenMai_Dao daoKM = new KhuyenMai_Dao();
 
     private final SanPhamDao sanPhamDao = new SanPhamImpl();
@@ -807,6 +805,9 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
     }
 
     public void docDuLieu() {
+
+        DefaultTableModel model = (DefaultTableModel) tblDSSP.getModel();
+        model.setRowCount(0);
         try {
             int d = 1;
             List<SanPham> list = sanPhamDao.getAllSP();
@@ -826,7 +827,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                     sta = "Còn hàng";
                 } else
                     sta = "Hết hàng";
-                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                if (x.getVat() == 1) {
 
                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                 } else
@@ -834,7 +835,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
                 double giaBanKM = giaBan - (float) (giaBan * (float) ((float) pt / 100));
                 if (x.getKhuyenMai() == null) {
-                    km = "null";
+                    km = "Không có";
 //				Không có khuyến mãi
 
                     String maCL = x.getChatLieu().getMaChatLieu();
@@ -1028,7 +1029,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                     btnSua.setText("Sửa");
                     reSet();
                     xoaAllDataTable();
-                    docDuLieu(); // Gọi lại phương thức để đọc dữ liệu mới từ cơ sở dữ liệu
+                    docDuLieu();
                     JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công");
                     btnSua.setIcon(new ImageIcon("Anh\\sua.png"));
                     chkThem = false;
@@ -1037,14 +1038,37 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                     btnLuu.setEnabled(false);
                     btnThem.setEnabled(true);
 
-                    // Cập nhật lại bảng hiển thị sau khi cập nhật dữ liệu thành công
+//                    // Cập nhật lại bảng hiển thị sau khi cập nhật dữ liệu thành công
                     DefaultTableModel model = (DefaultTableModel) tblDSSP.getModel();
                     model.setRowCount(0); // Xóa tất cả các dòng hiện có trên bảng
+                    int n = 0;
+                    String sta = "";
+                    String khuyenMai = "";
+                    double giaBanSauSua = 0.0;
                     for (SanPham sanPham : sanPhamDao.getAllSP()) {
-                        model.addRow(new Object[]{sanPham.getMaSp(), sanPham.getTensp(), sanPham.getLoaiSanPham().getTenLoaiSP(),
-                                sanPham.getGianhap(), sanPham.getSoluong(), sanPham.getNgaynhap(), sanPham.getNhaCungCap().getTenNhaCungCap(),
-                                sanPham.getChatLieu().getTenChatLieu(), sanPham.getSize(), sanPham.getMauSac(), sanPham.getDonViTinh(),
-                                sanPham.getKhuyenMai(), sanPham.getVat(), sanPham.getTinhTrang(), sanPham.getGiaBan()});
+                        if (sanPham.getVat() == 1) {
+
+                            VAT = (float) (tinhGiaBan(sanPham.getGianhap()) * 0.05);
+                        } else
+                            VAT = 0;
+
+                        if (sanPham.getTinhTrang() == true) {
+                            sta = "Còn hàng";
+                        } else
+                            sta = "Hết hàng";
+
+                        if (sanPham.getKhuyenMai() == null) {
+                            khuyenMai = "Không có";
+                        }
+                        else
+                            khuyenMai = sanPham.getKhuyenMai().getTenKhuyenMai();
+
+                        giaBanSauSua = tinhGiaBan(sanPham.getGianhap()) + VAT;
+                        model.addRow(new Object[]{n++,sanPham.getMaSp(), sanPham.getTensp(), sanPham.getLoaiSanPham().getTenLoaiSP(),
+                                tien.format(sanPham.getGianhap()), sanPham.getSoluong(), sanPham.getNgaynhap(), sanPham.getNhaCungCap().getTenNhaCungCap(),
+                                sanPham.getChatLieu().getTenChatLieu() + "(" + sanPham.getChatLieu().getMoTa() + ")"
+                                , sanPham.getSize(), sanPham.getMauSac(), sanPham.getDonViTinh(),
+                                khuyenMai, VAT, sta, tien.format(giaBanSauSua)});
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Cập nhật thất bại.");
@@ -1211,7 +1235,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                     HashSet<String> tenlsp = new HashSet<>();
 
                     for (SanPham x : listsp) {
-                        String o = sanPhamDao.getTenLoaiSP(x.getMaSp());
+                        String o = x.getLoaiSanPham().getTenLoaiSP();
 
                         tenlsp.add(o);
                     }
@@ -1390,7 +1414,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
 
             for (SanPham x : list) {
                 if (x.getMaSp().equals(tablemodel.getValueAt(row, 1).toString())) {
-                    if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                    if (x.getVat() == 1) {
                         rdCoVAT.setSelected(true);
                     } else {
                         rdKhongVAT.setSelected(true);
@@ -1533,7 +1557,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                 sta = "Còn hàng";
                             } else
                                 sta = "Hết hàng";
-                            if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                            if (x.getVat() == 1) {
 
                                 VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                             } else
@@ -1550,7 +1574,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                 sta = "Còn hàng";
                             } else
                                 sta = "Hết hàng";
-                            if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                            if (x.getVat() == 1) {
 
                                 VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                             } else
@@ -1586,7 +1610,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                 sta = "Còn hàng";
                             } else
                                 sta = "Hết hàng";
-                            if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                            if (x.getVat() == 1) {
 
                                 VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                             } else
@@ -1603,7 +1627,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                 sta = "Còn hàng";
                             } else
                                 sta = "Hết hàng";
-                            if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                            if (x.getVat() == 1) {
 
                                 VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                             } else
@@ -1629,7 +1653,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                 sta = "Còn hàng";
                             } else
                                 sta = "Hết hàng";
-                            if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                            if (x.getVat() == 1) {
 
                                 VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                             } else
@@ -1646,7 +1670,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                 sta = "Còn hàng";
                             } else
                                 sta = "Hết hàng";
-                            if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                            if (x.getVat() == 1) {
 
                                 VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                             } else
@@ -1674,7 +1698,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1691,7 +1715,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1720,7 +1744,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1737,7 +1761,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1765,7 +1789,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1782,7 +1806,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1812,7 +1836,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1829,7 +1853,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1860,7 +1884,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -1877,7 +1901,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                                     sta = "Còn hàng";
                                 } else
                                     sta = "Hết hàng";
-                                if (sanPhamDao.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else

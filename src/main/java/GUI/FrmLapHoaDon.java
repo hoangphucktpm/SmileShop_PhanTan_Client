@@ -850,7 +850,7 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
                                 DefaultTableModel modelNEw = (DefaultTableModel) table_CTHD.getModel();
 
                                 float VAT = x.getVat();
-                                if (daoSP.vat(x.getMaSp()) == 1) {
+                                if (x.getVat() == 1) {
 
                                     VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
                                 } else
@@ -982,14 +982,10 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
             double giaBan = x.getGiaBan();
             float VAT = x.getVat();
 
-            try {
-                if (daoSP.vat(x.getMaSp()) == 1) {
-                    VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
-                } else {
-                    VAT = 0;
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
+            if (x.getVat() == 1) {
+                VAT = (float) (tinhGiaBan(x.getGianhap()) * 0.05);
+            } else {
+                VAT = 0;
             }
         }
     }

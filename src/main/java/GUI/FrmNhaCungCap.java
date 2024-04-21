@@ -1,10 +1,9 @@
 package GUI;
 
-import DAO.NhaCungCap_Dao;
 import DAOTest.NhaCungCapDao;
 import DAOTest.impl.NhaCungCapImpl;
 import Database.ConnectDatabase;
-import Entity.NhaCungCap;
+import Entities.NhaCungCap;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -58,7 +57,6 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     private JRadioButton rdStatus;
     private JButton btnTim;
     private JButton btnResetTim;
-    private NhaCungCap_Dao dao = new NhaCungCap_Dao();
     private List<String> listMa = new ArrayList<>();
     private List<String> listNCC = new ArrayList<>();
     private List<String> listTimNCC = new ArrayList<>();
@@ -460,7 +458,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
         else {
             try {
                 if (chkThem == true && chkSua == false) {
-                    Entities.NhaCungCap nhaCungCap = new Entities.NhaCungCap(txtMaNCC.getText(), tenNCCString, Sdt, email, diaChi, (short) tinhTrang);
+                    NhaCungCap nhaCungCap = new NhaCungCap(txtMaNCC.getText(), tenNCCString, Sdt, email, diaChi, (short) tinhTrang);
                     boolean newL = nccDao.them(nhaCungCap);
                     if (newL == true) {
                         btnThem.setText("Thêm");
@@ -475,7 +473,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
 
                         JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp không thành công");
                 } else if (chkSua == true && chkThem == false) {
-                    Entities.NhaCungCap nhaCungCap = nccDao.getMa(txtMaNCC.getText()).get(0);
+                    NhaCungCap nhaCungCap = nccDao.getMa(txtMaNCC.getText()).get(0);
                     nhaCungCap.setTenNhaCungCap(tenNCCString);
                     nhaCungCap.setSdt(Sdt);
                     nhaCungCap.setEmail(email);
@@ -508,14 +506,14 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
      */
     public void docDuLieu() {
         int d = 1;
-        List<Entities.NhaCungCap> list = null;
+        List<NhaCungCap> list = null;
         try {
             list = nccDao.getNhaCungCaps();
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        for (Entities.NhaCungCap x : list) {
+        for (NhaCungCap x : list) {
 
             tablemodel.addRow(new Object[]{
                     d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
@@ -570,7 +568,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     //	Lưu dữ liệu vào comboBOx
     public void updateCBBox() {
         comboBox.removeAllItems();
-        List<Entities.NhaCungCap> listN = null;
+        List<NhaCungCap> listN = null;
         try {
             listN = nccDao.getNhaCungCaps();
         } catch (RemoteException e) {
@@ -578,7 +576,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
             e.printStackTrace();
         }
 
-        for (Entities.NhaCungCap n : listN) {
+        for (NhaCungCap n : listN) {
             if (rdMNCC.isSelected()) {
                 comboBox.addItem(n.getMaNhaCungCap());
                 comboBox.setSelectedItem("");
@@ -595,7 +593,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                 comboBox.setSelectedItem("");
             } else if (rdStatus.isSelected()) {
                 comboBox.removeAllItems();
-                List<Entities.NhaCungCap> lncc = null;
+                List<NhaCungCap> lncc = null;
                 try {
                     lncc = nccDao.getNhaCungCaps();
                 } catch (RemoteException e) {
@@ -604,7 +602,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                 }
                 HashSet<String> tinhTrang = new HashSet<>();
                 String d;
-                for (Entities.NhaCungCap x : lncc) {
+                for (NhaCungCap x : lncc) {
                     if (x.getTinhTrang() == 1) {
                         d = "Đang hợp tác";
                     } else
@@ -640,7 +638,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                 xoaAllDataTable();
                 if (rdTenNCC.isSelected()) {
 
-                    List<Entities.NhaCungCap> list = null;
+                    List<NhaCungCap> list = null;
                     try {
                         list = nccDao.getTen(tim);
                     } catch (RemoteException e) {
@@ -648,7 +646,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                         e.printStackTrace();
                     }
                     txtBaoLoiTimKiem.setText("");
-                    for (Entities.NhaCungCap x : list) {
+                    for (NhaCungCap x : list) {
                         tablemodel.addRow(new Object[]{
                                 d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
                         });
@@ -656,7 +654,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                     }
 
                 } else if (rdMNCC.isSelected()) {
-                    List<Entities.NhaCungCap> list = null;
+                    List<NhaCungCap> list = null;
                     try {
                         list = nccDao.getMa(tim);
                     } catch (RemoteException e) {
@@ -664,7 +662,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                         e.printStackTrace();
                     }
                     txtBaoLoiTimKiem.setText("");
-                    for (Entities.NhaCungCap x : list) {
+                    for (NhaCungCap x : list) {
                         tablemodel.addRow(new Object[]{
                                 d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
                         });
@@ -672,7 +670,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
 
                 } else if (rdSDT.isSelected()) {
 
-                    List<Entities.NhaCungCap> list = null;
+                    List<NhaCungCap> list = null;
                     try {
                         list = nccDao.getSDT(tim);
                     } catch (RemoteException e) {
@@ -681,14 +679,14 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                     }
                     txtBaoLoiTimKiem.setText("");
 
-                    for (Entities.NhaCungCap n : list) {
+                    for (NhaCungCap n : list) {
                         tablemodel.addRow(new Object[]{
                                 d++, n.getMaNhaCungCap(), n.getTenNhaCungCap(), n.getSdt(), n.getEmail(), n.getDiaChi()
                         });
                     }
 
                 } else if (rdE.isSelected()) {
-                    List<Entities.NhaCungCap> list = null;
+                    List<NhaCungCap> list = null;
                     try {
                         list = nccDao.getEmail(tim);
                     } catch (RemoteException e) {
@@ -696,14 +694,14 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                         e.printStackTrace();
                     }
 
-                    for (Entities.NhaCungCap n : list) {
+                    for (NhaCungCap n : list) {
                         tablemodel.addRow(new Object[]{
                                 d++, n.getMaNhaCungCap(), n.getTenNhaCungCap(), n.getSdt(), n.getEmail(), n.getDiaChi()
                         });
                     }
 
                 } else if (rdStatus.isSelected()) {
-                    List<Entities.NhaCungCap> list = null;
+                    List<NhaCungCap> list = null;
                     try {
                         list = nccDao.getNhaCungCaps();
                     } catch (RemoteException e) {
@@ -711,7 +709,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                         e.printStackTrace();
                     }
                     txtBaoLoiTimKiem.setText("");
-                    for (Entities.NhaCungCap x : list) {
+                    for (NhaCungCap x : list) {
                         if (tim.equalsIgnoreCase("Đang hợp tác") || tim.contains("Đang") || tim.contains("đang") || tim.contains("hợp tác")) {
                             if (x.getTinhTrang() == 1) {
                                 tablemodel.addRow(new Object[]{
@@ -850,14 +848,14 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
             txtSdt.setText(tablemodel.getValueAt(row, 3).toString());
             txtE.setText(tablemodel.getValueAt(row, 4).toString());
             txtDiaChi.setText(tablemodel.getValueAt(row, 5).toString());
-            List<Entities.NhaCungCap> list = null;
+            List<NhaCungCap> list = null;
             try {
                 list = nccDao.getNhaCungCaps();
             } catch (RemoteException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            for (Entities.NhaCungCap x : list) {
+            for (NhaCungCap x : list) {
                 if (x.getMaNhaCungCap().equals(tablemodel.getValueAt(row, 1).toString())) {
                     if (x.getTinhTrang() == 1) {
                         rdHopTac.setSelected(true);
