@@ -9,6 +9,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 public class FrmQuenMatKhau extends JFrame implements ActionListener {
@@ -28,6 +29,9 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
     SendEmailSMTP sendMail = new SendEmailSMTP();
     ThongTinCaNhanDao dao = new ThongTinCaNhanImpl();
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
 
     /**
      * Launch the application.
@@ -36,6 +40,7 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    ThongTinCaNhanDao thongTinCaNhanDao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
                     FrmQuenMatKhau frame = new FrmQuenMatKhau();
                     frame.setVisible(true);
                 } catch (Exception e) {

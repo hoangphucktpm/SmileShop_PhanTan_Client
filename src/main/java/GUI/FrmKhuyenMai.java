@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -95,11 +96,16 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
     private JButton btnLuu;
 
     private List<String> selectedRowsValues = new ArrayList<>();
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
+                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
+
                     ConnectDatabase.getInstance().connect();
                     FrmKhuyenMai frame = new FrmKhuyenMai();
                     frame.setVisible(true);

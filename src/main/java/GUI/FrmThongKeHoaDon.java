@@ -77,6 +77,16 @@ public class FrmThongKeHoaDon extends JFrame implements ActionListener {
     private JButton btnInThongKe;
 
     private ThongKeHoaDonDao daoImpl = new ThongKeHoaDonImpl();
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+    public static void main(String[] args) {
+        try {
+            FrmThongKeHoaDon frm = new FrmThongKeHoaDon();
+            frm.setVisible(true);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     public FrmThongKeHoaDon() throws RemoteException {
 
@@ -306,14 +316,7 @@ public class FrmThongKeHoaDon extends JFrame implements ActionListener {
         ;
     }
 
-    public static void main(String[] args) {
-        try {
-            FrmThongKeHoaDon frm = new FrmThongKeHoaDon();
-            frm.setVisible(true);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void xoaAllDataTable() {
         tablemodel.addRow(new Object[]{});

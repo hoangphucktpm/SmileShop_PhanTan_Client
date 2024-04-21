@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -113,6 +114,9 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     private Container cbChuc;
     private JPanel pnlNutChucNang;
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
     /**
      * Launch the application.
      */
@@ -120,6 +124,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
                     FrmNhanVien frame = new FrmNhanVien();
                     frame.setVisible(true);
                 } catch (Exception e) {

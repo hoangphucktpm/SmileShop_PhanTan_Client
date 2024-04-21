@@ -8,9 +8,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 public class FrmDangNhap extends JFrame implements ActionListener {
+
+
 
     JPanel contentPane;
     private JTextField txtUserName;
@@ -30,12 +33,15 @@ public class FrmDangNhap extends JFrame implements ActionListener {
     private JButton btnLamMoi;
     private JLabel lblMessLoiUser;
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
                     FrmDangNhap frame = new FrmDangNhap();
+                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();

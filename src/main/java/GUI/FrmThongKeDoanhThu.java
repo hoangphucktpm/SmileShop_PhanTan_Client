@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class FrmThongKeDoanhThu extends JFrame implements ActionListener {
+public class    FrmThongKeDoanhThu extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 1L;
     public static DefaultTableModel tablemodel = new DefaultTableModel();
@@ -95,6 +95,21 @@ public class FrmThongKeDoanhThu extends JFrame implements ActionListener {
     private JLabel lblTienKhuyenMai;
 
     private ThongKeDoanhThuDao daoTKDTImpl = new ThongKeDoanhThuImpl();
+
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
+
+    public static void main(String[] args) {
+        try {
+
+            FrmThongKeDoanhThu frm = new FrmThongKeDoanhThu();
+            frm.setVisible(true);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     public FrmThongKeDoanhThu() throws RemoteException {
         pnlThongTin = new JPanel();
@@ -397,15 +412,7 @@ public class FrmThongKeDoanhThu extends JFrame implements ActionListener {
         btnInThongKe.setEnabled(false);
     }
 
-    public static void main(String[] args) {
-        try {
-            FrmThongKeDoanhThu frm = new FrmThongKeDoanhThu();
-            frm.setVisible(true);
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+
 
     public void upDateComboBox() {
         cboQuy.removeAllItems();

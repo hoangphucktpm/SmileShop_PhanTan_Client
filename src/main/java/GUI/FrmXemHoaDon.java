@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -90,10 +91,18 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
     DecimalFormat tien = new DecimalFormat(",##0");
     List<HoaDon> list = hd_dao.getAllHoaDon();
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    KhachHangDao khachHangDao = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");
+                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
+                    XemHoaDonDao xemHoaDonDao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
+
+
                     FrmXemHoaDon frame = new FrmXemHoaDon();
                     frame.setVisible(true);
                 } catch (Exception e) {

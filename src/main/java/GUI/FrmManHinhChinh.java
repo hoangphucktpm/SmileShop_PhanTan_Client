@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListener {
@@ -74,11 +75,12 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
     private JMenuBar menuBar_KhuyenMai;
     private JToolBar toolBar;
 
-    /**
-     * Launch the application.
-     */
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
     public static void main(String[] args) {
         try {
+            NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
             FrmManHinhChinh frame = new FrmManHinhChinh("");
             frame.setVisible(true);
         } catch (Exception e) {

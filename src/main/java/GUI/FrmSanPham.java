@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -127,6 +128,9 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
     private JLabel lblLoi_Ngay;
     private JLabel lblGiaNhap;
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
     /**
      * Launch the application.
      */
@@ -134,6 +138,10 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
+                    NhaCungCapDao nhaCungCapDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");
+                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
+
                     FrmSanPham frame = new FrmSanPham();
                     frame.setVisible(true);
                 } catch (Exception e) {

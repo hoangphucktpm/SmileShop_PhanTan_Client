@@ -14,6 +14,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -82,10 +83,14 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     private JLabel txtBaoLoiTimKiem;
     private ButtonGroup gr1;
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    NhaCungCapDao nhaCungCapDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");
                     ConnectDatabase.getInstance().connect();
                     FrmNhaCungCap frame = new FrmNhaCungCap();
                     frame.setVisible(true);

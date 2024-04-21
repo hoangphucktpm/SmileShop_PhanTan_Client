@@ -44,8 +44,10 @@ public class FrmXuatThongKe extends JFrame implements Printable,ActionListener {
 	private JLabel lblNoiDungNgayLap;
 	
 	int count = 0;
-	
-	
+	private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

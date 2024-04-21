@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,6 +54,9 @@ public class FrmThongTinCaNhan extends JFrame implements ActionListener {
 
     boolean check = false;
 
+
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
     /**
      * Launch the application.
      */
@@ -60,6 +64,8 @@ public class FrmThongTinCaNhan extends JFrame implements ActionListener {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    ThongTinCaNhanDao thongTinCaNhanDao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
+                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
                     FrmThongTinCaNhan frame = new FrmThongTinCaNhan("");
                     frame.setVisible(true);
                 } catch (Exception e) {

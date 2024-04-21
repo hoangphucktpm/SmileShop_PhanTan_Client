@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -131,10 +132,17 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
     private JLabel lblloisdt;
     private JLabel lblloihd;
 
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    LapHoaDonDao lapHoaDonDao = (LapHoaDonDao) Naming.lookup(URL + "LapHoaDonDao");
+                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
+                    XemHoaDonDao xemHoaDonDao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
                     FrmLapHoaDon frame = new FrmLapHoaDon();
                     frame.setVisible(true);
 

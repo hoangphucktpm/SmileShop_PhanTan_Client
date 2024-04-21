@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.ParseException;
@@ -90,6 +91,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 
     private KhachHangDao khachHangImpl = new KhachHangImpl();
     List<LoaiKhachHang> listLKH = khachHangImpl.getAllLoaiKH();
+    private static final String URL = "rmi://HOANGPHUC:6541/";
 
     /**
      * Launch the application.
@@ -98,6 +100,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    KhachHangDao khachHangDao = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");
                     ConnectDatabase.getInstance().connect();
                     FrmKhachHang frame = new FrmKhachHang();
                     frame.setVisible(true);

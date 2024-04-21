@@ -65,11 +65,15 @@ public class FrmThongKeTinhTrangSP extends JFrame implements ActionListener {
 
     private TinhTrangSanPhamDao daoImpl = new TinhTrangSanPhamImpl();
 
+
     DecimalFormat tien = new DecimalFormat("#,##0");
     private JButton btnInThongKe;
     String hinhThucThongKe;
 
     FrmXuatThongKe frmInTK = new FrmXuatThongKe();
+
+    private static final String URL = "rmi://HOANGPHUC:6541/";
+
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
