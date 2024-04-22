@@ -31,7 +31,7 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
     SendEmailSMTP sendMail = new SendEmailSMTP();
     ThongTinCaNhanDao dao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
 
-    private static final String URL = "rmi://192.168.1.33:6541/";
+private static final String URL = "rmi://192.168.1.16:6541/";
 
 
 

@@ -93,7 +93,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 
     private KhachHangDao khachHangImpl = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");;
     List<LoaiKhachHang> listLKH = khachHangImpl.getAllLoaiKH();
-    private static final String URL = "rmi://192.168.1.33:6541/";
+private static final String URL = "rmi://192.168.1.16:6541/";
 
     /**
      * Launch the application.
@@ -650,6 +650,12 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
             }
         }
         btnThem.setEnabled(false);
+        btnSua.setEnabled(true);
+        chkThem = false;
+        btnThem.setText("Thêm");
+        btnThem.setIcon(new ImageIcon("Anh\\them.png"));
+        btnLuu.setEnabled(false);
+
     }
 
     @Override

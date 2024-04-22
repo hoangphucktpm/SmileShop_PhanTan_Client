@@ -77,7 +77,7 @@ public class FrmThongKeTinhTrangSP extends JFrame implements ActionListener {
 
     FrmXuatThongKe frmInTK = new FrmXuatThongKe();
 
-    private static final String URL = "rmi://192.168.1.33:6541/";
+private static final String URL = "rmi://192.168.1.16:6541/";
 
 
     public static void main(String[] args) {

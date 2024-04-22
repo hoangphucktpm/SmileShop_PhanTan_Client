@@ -84,7 +84,8 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     private JLabel txtBaoLoiTimKiem;
     private ButtonGroup gr1;
 
-    private static final String URL = "rmi://192.168.1.33:6541/";
+    private static final String URL = "rmi://192.168.1.16:6541/";
+
 
 
     public static void main(String[] args) {
@@ -610,13 +611,13 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                     if (x.getTinhTrang() == 1) {
                         d = "Đang hợp tác";
                     } else
-                        d = "Không còn hợp tác";
+                        d = "Ngưng hợp tác";
                     tinhTrang.add(d);
                 }
                 for (String tinhTrangTim : tinhTrang) {
                     comboBox.addItem(tinhTrangTim);
-                    comboBox.setSelectedItem("");
                 }
+                comboBox.setSelectedItem("Ngưng hợp tác");
             }
 
         }
@@ -714,20 +715,17 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
                     }
                     txtBaoLoiTimKiem.setText("");
                     for (NhaCungCap x : list) {
-                        if (tim.equalsIgnoreCase("Đang hợp tác") || tim.contains("Đang") || tim.contains("đang") || tim.contains("hợp tác")) {
-                            if (x.getTinhTrang() == 1) {
-                                tablemodel.addRow(new Object[]{
-                                        d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
-                                });
-                                table_1.setModel(tablemodel);
-                            }
-                        } else if (tim.equalsIgnoreCase("Ngưng hợp tác") || tim.contains("Ngưng") || tim.contains("ngưng"))
-                            if (x.getTinhTrang() == 0) {
-                                tablemodel.addRow(new Object[]{
-                                        d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
-                                });
-                                table_1.setModel(tablemodel);
-                            }
+                        if (tim.equalsIgnoreCase("Đang hợp tác") && x.getTinhTrang() == 1) {
+                            tablemodel.addRow(new Object[]{
+                                    d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
+                            });
+                            table_1.setModel(tablemodel);
+                        } else if (tim.equalsIgnoreCase("Ngưng hợp tác") && x.getTinhTrang() == 0) {
+                            tablemodel.addRow(new Object[]{
+                                    d++, x.getMaNhaCungCap(), x.getTenNhaCungCap(), x.getSdt(), x.getEmail(), x.getDiaChi()
+                            });
+                            table_1.setModel(tablemodel);
+                        }
                     }
                 }
             }

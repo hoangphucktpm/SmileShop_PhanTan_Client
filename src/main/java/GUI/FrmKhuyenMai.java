@@ -41,7 +41,7 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
     private JTextField txtTenKM;
     private JDateChooser txtChonNgayBD;
     private JTable tableThongTinKM;
-    private KhuyenMaiDao kmDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");;
+    private KhuyenMaiDao kmDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
     private JButton btnThem;
     private JPanel panel_TieuDe;
     private JPanel panel_CTKM;
@@ -92,12 +92,12 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
     boolean lock = false;
     boolean chkThem = false;
     boolean chkSua = false;
-    private SanPhamDao daoSP = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;
+    private SanPhamDao daoSP = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
     private JButton btnLamMoiTimKiem;
     private JButton btnLuu;
 
     private List<String> selectedRowsValues = new ArrayList<>();
-    private static final String URL = "rmi://192.168.1.33:6541/";
+private static final String URL = "rmi://192.168.1.16:6541/";
 
 
     public static void main(String[] args) {
@@ -638,7 +638,6 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
         tablemodel1.getDataVector().removeAllElements();
     }
 
-    // Thêm khuyến mãi mới và sửa khuyến mãi
     public void LuuThongTin() throws ParseException, ClassNotFoundException, SQLException, RemoteException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String maKM = txtMaKM.getText();
@@ -650,7 +649,7 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
         Date ngaybdsql = new Date(ngaybd1.getTime());
         Date ngayktsql = new Date(ngaykt1.getTime());
         boolean trangThai = true;
-        int stat = 1;// Mặc định là đang áp dụng
+        int stat = 1; // Mặc định là đang áp dụng
         if (rdHetHan.isSelected()) {
             stat = 0;
             trangThai = false;
@@ -667,12 +666,13 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
                     if (kmmoi == true) {
                         xoaTrang();
                         deleteAllDataTable();
-//			                    add sản phẩm khuyến mãi
-                        for (String maSPAP : selectedRowsValues) {
+
+                        for(String maSPAP : selectedRowsValues) {
                             kmDao.adDSPKM(maSPAP, maKM);
                         }
 
-                        docDuLieu();
+                      docDuLieuSP(); // Cập nhật dữ liệu sản phẩm
+                        docDuLieu(); // Cập nhật dữ liệu khuyến mãi
                         txtMaKM.setText(deFaultID());
 
                         JOptionPane.showMessageDialog(this, "Thêm chương trình khuyến mãi thành công!");
@@ -687,26 +687,25 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
                     kmDao.capNhatNull(maKM);
                     for (String maSPAP : selectedRowsValues) {
                         kmDao.adDSPKM(maSPAP, maKM);
-                        System.out.println(maSPAP);
                     }
                     boolean kmmoi = kmDao.updateKhuyenMai(km);
 
                     if (kmmoi) {
                         xoaTrang();
                         deleteAllDataTable();
-                        docDuLieu();
-                        docDuLieuSP();
+                        // Cập nhật giao diện sau khi sửa
+                        docDuLieuSP(); // Cập nhật dữ liệu sản phẩm
+                        docDuLieu(); // Cập nhật dữ liệu khuyến mãi
                         JOptionPane.showMessageDialog(this, "Cập nhật chương trình khuyến mãi thành công!");
                     } else {
                         JOptionPane.showMessageDialog(this, "Cập nhật chương trình khuyến mãi không thành công!");
                     }
                 }
             }
+            // Đảm bảo rằng các biến cờ và trạng thái được thiết lập lại đúng cách
             chkSua = false;
             chkThem = false;
             lock = false;
-            docDuLieu();
-            docDuLieuSP();
             khoaText(lock);
             btnSua.setText("Sửa");
             btnSua.setIcon(new ImageIcon("Anh\\sua.png"));
@@ -792,9 +791,14 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
             table_SP.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
             table_SP.getColumnModel().getColumn(2).setCellRenderer(table_SP.getDefaultRenderer(Boolean.class));
 
-            tablemodel.addRow(new Object[] { x.getMaSp(), x.getTensp(),
-                    x.getKhuyenMai() == null ? false : true });
+            String km = kmDao.layKhuyenMaiTuSanPham(x.getMaSp());
+            if(km == null) {
+                tablemodel.addRow(new Object[] { x.getMaSp(), x.getTensp(), false });
+            } else {
+                tablemodel.addRow(new Object[] { x.getMaSp(), x.getTensp(), true });
+            }
         }
+        table_SP.setModel(tablemodel);
     }
 
     // Đọc dữ liệu sản phẩm
