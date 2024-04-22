@@ -1,35 +1,78 @@
 package GUI;
 
-import DAOTest.NhanVienDao;
-import DAOTest.impl.NhanVienImpl;
-import Entities.NhanVien;
-import com.toedter.calendar.JDateChooser;
+import java.awt.EventQueue;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.*;
+
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
+
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JRadioButton;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import java.awt.Component;
+import java.awt.Container;
+
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
+import java.awt.Dimension;
+import javax.swing.border.EtchedBorder;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+
+import DAOTest.NhanVienDao;
+import DAOTest.impl.NhanVienImpl;
+import com.toedter.calendar.JDateChooser;
+
 import java.util.Locale;
+
+import Entities.NhanVien;
+import lombok.SneakyThrows;
+
+import java.util.List;
 
 public class FrmNhanVien extends JFrame implements ActionListener, MouseListener, ItemListener, DocumentListener, KeyListener {
 
@@ -42,7 +85,8 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     private JTextField txtDiaChi;
     private JPanel contentPane;
     private JLabel lblTieuDeTrang;
-    private NhanVienDao dao = new NhanVienImpl();
+    private static final String URL = "rmi://192.168.1.33:6541/";
+    private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");;
     private DefaultTableModel tablemodel;
     private JTable table_DSKH;
     private JDateChooser txtNgay;
@@ -114,9 +158,6 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     private Container cbChuc;
     private JPanel pnlNutChucNang;
 
-    private static final String URL = "rmi://HOANGPHUC:6541/";
-
-
     /**
      * Launch the application.
      */
@@ -124,7 +165,6 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
                     FrmNhanVien frame = new FrmNhanVien();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -137,7 +177,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     /**
      * Create the frame.
      */
-    public FrmNhanVien() throws RemoteException {
+    public FrmNhanVien() throws RemoteException, MalformedURLException, NotBoundException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1347, 843);
         setResizable(false);
@@ -547,6 +587,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 
     }
 
+    @SneakyThrows
     @Override
     public void mouseClicked(MouseEvent e) {
         btnThem.setEnabled(false);
@@ -555,9 +596,10 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
         txtMaNV.setText(tablemodel.getValueAt(row, 1).toString());
         maBanDau = tablemodel.getValueAt(row, 1).toString();
         textTen.setText(tablemodel.getValueAt(row, 2).toString());
-        java.util.Date utilDate = (java.util.Date) tablemodel.getValueAt(row, 3);
-        Date ngaySinh = new Date(utilDate.getTime());
-        txtNgay.setDate(ngaySinh);
+//        java.util.Date utilDate = (java.util.Date) tablemodel.getValueAt(row, 3);
+//        java.sql.Date ngaySinh = new java.sql.Date(utilDate.getTime());
+//        txtNgay.setDate(ngaySinh);
+        txtNgay.setDate(dao.getAllNV().get(row).getNgaySinh());
         txtCCCD.setText(tablemodel.getValueAt(row, 4).toString());
         txtSDT.setText(tablemodel.getValueAt(row, 5).toString());
         String cbGioiTinh = tablemodel.getValueAt(row, 6).toString();
@@ -637,6 +679,12 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 
     public void docDuLieu() {
 
+        rdCa1.setSelected(true);
+        rdNam.setSelected(true);
+        rdĐangLam.setSelected(true);
+
+
+
         int d = 1;
         List<NhanVien> list = null;
         try {
@@ -655,6 +703,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
             int chucVu = x.getChucVu();
             String chucVuText = "";
             int ca = x.getCaLamViec();
+            SimpleDateFormat NgaySinh = new SimpleDateFormat("yyyy/MM/dd");
             String catext = "";
 
             if (chucVu == 1) {
@@ -673,12 +722,11 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
             }
 //	        String calam = x.getCaLamViec();
 
-            tablemodel.addRow(new Object[]{d++, x.getMaNhanvien(), x.getTenNhanVien(), x.getNgaySinh(), x.getCccd(),
+            tablemodel.addRow(new Object[]{d++, x.getMaNhanvien(), x.getTenNhanVien(),NgaySinh.format(x.getNgaySinh()), x.getCccd(),
                     x.getSdt(), gioiTinhText, trangThaiText, x.getCaLamViec(), chucVuText, x.getEmail(),
                     x.getDiaChi()});
         }
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();

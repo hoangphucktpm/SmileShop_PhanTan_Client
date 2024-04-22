@@ -9,7 +9,9 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class FrmQuenMatKhau extends JFrame implements ActionListener {
@@ -27,9 +29,9 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
     public String user = "";
     public String newPass = matKhauMoi();
     SendEmailSMTP sendMail = new SendEmailSMTP();
-    ThongTinCaNhanDao dao = new ThongTinCaNhanImpl();
+    ThongTinCaNhanDao dao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
 
-    private static final String URL = "rmi://HOANGPHUC:6541/";
+    private static final String URL = "rmi://192.168.1.33:6541/";
 
 
 
@@ -40,7 +42,6 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    ThongTinCaNhanDao thongTinCaNhanDao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
                     FrmQuenMatKhau frame = new FrmQuenMatKhau();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -53,7 +54,7 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
     /**
      * Create the frame.
      */
-    public FrmQuenMatKhau() throws RemoteException {
+    public FrmQuenMatKhau() throws RemoteException, MalformedURLException, NotBoundException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 400);
         contentPane = new JPanel();
@@ -168,7 +169,7 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
                             } else {
                                 JOptionPane.showMessageDialog(null, "Lỗi khi gửi Email.");
                             }
-                        } catch (RemoteException ex) {
+                        } catch (RemoteException | MalformedURLException | NotBoundException ex) {
                             ex.printStackTrace();
                         }
                     });
@@ -187,6 +188,10 @@ public class FrmQuenMatKhau extends JFrame implements ActionListener {
                 setVisible(false);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            } catch (NotBoundException ex) {
+                throw new RuntimeException(ex);
             }
         }
     }

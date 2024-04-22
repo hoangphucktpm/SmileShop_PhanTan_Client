@@ -2,7 +2,6 @@ package GUI;
 
 import DAOTest.NhaCungCapDao;
 import DAOTest.impl.NhaCungCapImpl;
-import Database.ConnectDatabase;
 import Entities.NhaCungCap;
 
 import javax.swing.*;
@@ -14,7 +13,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -69,7 +70,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     private DefaultComboBoxModel cboModeTimNCC = new DefaultComboBoxModel();
 
     private NhaCungCap listN = new NhaCungCap();
-    private NhaCungCapDao nccDao = new NhaCungCapImpl();
+    private NhaCungCapDao nccDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");;
     private JButton btnLuu;
 
     private boolean chkThem = false;
@@ -83,15 +84,13 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     private JLabel txtBaoLoiTimKiem;
     private ButtonGroup gr1;
 
-    private static final String URL = "rmi://HOANGPHUC:6541/";
+    private static final String URL = "rmi://192.168.1.33:6541/";
 
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    NhaCungCapDao nhaCungCapDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");
-                    ConnectDatabase.getInstance().connect();
                     FrmNhaCungCap frame = new FrmNhaCungCap();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -104,7 +103,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
     /**
      * Create the frame.
      */
-    public FrmNhaCungCap() throws RemoteException {
+    public FrmNhaCungCap() throws RemoteException, MalformedURLException, NotBoundException {
         pnlThongTin = new JPanel();
         getContentPane().setBackground(new Color(129, 250, 243));
         getContentPane().setLayout(null);
@@ -511,7 +510,7 @@ public class FrmNhaCungCap extends JFrame implements ActionListener, MouseListen
      */
     public void docDuLieu() {
         int d = 1;
-        List<NhaCungCap> list = null;
+        List<NhaCungCap> list = new ArrayList<>();
         try {
             list = nccDao.getNhaCungCaps();
         } catch (RemoteException e) {

@@ -1,7 +1,10 @@
 package client;
 
 
+import DAOTest.NhaCungCapDao;
 import DAOTest.NhanVienDao;
+import Entities.NhaCungCap;
+import Entities.NhanVien;
 
 
 import java.rmi.Naming;
@@ -9,11 +12,11 @@ import java.util.Scanner;
 
 public class Client {
 
-    private static final String URL = "rmi://HOANGPHUC:6541/";
+    private static final String URL = "rmi://192.168.1.33:6541/";
 
     public static void main(String[] args) {
         try {
-            NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+            NhaCungCapDao nhaCungCapDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");
             Scanner scanner = new Scanner(System.in);
             int option;
 
@@ -28,7 +31,10 @@ public class Client {
 
                 // 1 - Tìm ra all nhân viên theo công ty
                 while (option == 1) {
-                    System.out.println(nhanVienDao.getAllNV());
+
+                    //         return "NhaCungCap{maNhaCungCap='" + this.maNhaCungCap + "', tenNhaCungCap='" + this.tenNhaCungCap + "', sdt='" + this.sdt + "', email='" + this.email + "', diaChi='" + this.diaChi + "', tinhTrang=" + this.tinhTrang + "}";
+                    NhaCungCap nhaCungCap = new NhaCungCap("NCC222", "Nha Cung Cap 1", "0123456789", "hi@gmail.com", "Dia Chi", 1);
+                    nhaCungCapDao.them(nhaCungCap);
                     break;
                 }
 

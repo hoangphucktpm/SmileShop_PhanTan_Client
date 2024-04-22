@@ -4,6 +4,8 @@ import GUI.FrmDangNhap;
 import GUI.FrmGioiThieu;
 
 import javax.swing.*;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class CountDownThread extends Thread {
@@ -38,7 +40,7 @@ public class CountDownThread extends Thread {
             FrmDangNhap frmDangNhap = new FrmDangNhap();
             frmDangNhap.setVisible(true);
             frmDangNhap.setLocationRelativeTo(null);
-        } catch (RemoteException e) {
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

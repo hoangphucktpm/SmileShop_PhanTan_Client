@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class FrmGioiThieu extends JFrame implements ActionListener{
 
@@ -11,7 +12,7 @@ public class FrmGioiThieu extends JFrame implements ActionListener{
 	public JProgressBar progressBar_1;
 
 
-	public FrmGioiThieu() {
+	public FrmGioiThieu() throws RemoteException{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 400);
 		contentPane = new JPanel();

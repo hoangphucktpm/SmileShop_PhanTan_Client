@@ -17,7 +17,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -39,7 +41,7 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
     private JTextField txtTenKM;
     private JDateChooser txtChonNgayBD;
     private JTable tableThongTinKM;
-    private KhuyenMaiDao kmDao = new KhuyenMaiImpl();
+    private KhuyenMaiDao kmDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");;
     private JButton btnThem;
     private JPanel panel_TieuDe;
     private JPanel panel_CTKM;
@@ -90,21 +92,18 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
     boolean lock = false;
     boolean chkThem = false;
     boolean chkSua = false;
-    private SanPhamDao daoSP = new SanPhamImpl();
+    private SanPhamDao daoSP = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;
     private JButton btnLamMoiTimKiem;
     private JButton btnLuu;
 
     private List<String> selectedRowsValues = new ArrayList<>();
-    private static final String URL = "rmi://HOANGPHUC:6541/";
+    private static final String URL = "rmi://192.168.1.33:6541/";
 
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
-                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
-
                     FrmKhuyenMai frame = new FrmKhuyenMai();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -120,7 +119,7 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public FrmKhuyenMai() throws RemoteException {
+    public FrmKhuyenMai() throws RemoteException, MalformedURLException, NotBoundException {
         pnlThongTin = new JPanel();
         getContentPane().setBackground(new Color(129, 250, 243));
         getContentPane().setLayout(null);
@@ -792,10 +791,9 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
             table_SP.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
             table_SP.getColumnModel().getColumn(2).setCellRenderer(table_SP.getDefaultRenderer(Boolean.class));
 
-            // Change the way the product's promotion status is determined
-            boolean isPromoted = x.getKhuyenMai() != null && x.getKhuyenMai().getTrangThai() == 1;
+//            boolean isPromoted = x.getKhuyenMai() != null && x.getKhuyenMai().getTrangThai() == 1;
 
-            tablemodel.addRow(new Object[]{x.getMaSp(), x.getTensp(), isPromoted});
+            tablemodel.addRow(new Object[]{x.getMaSp(), x.getTensp(), null});
         }
     }
 
