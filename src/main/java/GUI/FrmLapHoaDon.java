@@ -1298,12 +1298,13 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
 
             String maHoaDon = (String) hoaDon.get("MaHoaDon");
             String sdtKhachHang = (String) hoaDon.get("SoDienThoai");
-            String tenNhanVien = (String) hoaDon.get("TenNhanVien");
+            NhanVien nhanVien = (NhanVien) hoaDon.get("TenNhanVien");
+            String tenNhanVien = nhanVien.getTenNhanVien();
             String ngayTao = (String) hoaDon.get("NgayLap");
             String soLuong = (String) hoaDon.get("SoLuong");
 
             model.addRow(
-                    new Object[]{maHoaDon, sdtKhachHang, FrmDangNhap.taiKhoan.getTenTaiKhoan(), soLuong, ngayTao});
+                    new Object[]{maHoaDon, sdtKhachHang, tenNhanVien, soLuong, ngayTao});
         }
         cboSDTKH.removeAllItems();
         HashSet<String> sdtDuyet = new HashSet<>();
