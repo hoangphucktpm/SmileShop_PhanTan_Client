@@ -22,7 +22,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -48,9 +50,9 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
     private JTextField txtDiemTichDuoc;
     private JTextField txtTongThanhToan;
     private JTable table_CTHD;
-    private XemHoaDonDao hd_dao = new XemHoaDonImpl();
-    private KhachHangDao kh_dao = new KhachHangImpl();
-    private SanPhamDao sp_Dao = new SanPhamImpl();
+    private XemHoaDonDao hd_dao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
+    private KhachHangDao kh_dao = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");;
+    private SanPhamDao sp_Dao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;
     public static DefaultTableModel tblModelHoaDon = new DefaultTableModel();
 
     private DefaultComboBoxModel cboModetenKH = new DefaultComboBoxModel();
@@ -98,10 +100,6 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    KhachHangDao khachHangDao = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");
-                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
-                    XemHoaDonDao xemHoaDonDao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
-
 
                     FrmXemHoaDon frame = new FrmXemHoaDon();
                     frame.setVisible(true);
@@ -115,7 +113,7 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
     /**
      * Create the frame.
      */
-    public FrmXemHoaDon() throws RemoteException {
+    public FrmXemHoaDon() throws RemoteException, MalformedURLException, NotBoundException {
         pnlThongTin = new JPanel();
         getContentPane().setBackground(new Color(129, 250, 243));
         getContentPane().setLayout(null);
@@ -355,20 +353,24 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
                     int i = 0;
                     int soLuong = 0;
                     double tongTienSp = 0;
+                    int giaTri = 0;
                     double vat = 0;
                     for (CtHoadon x : list) {
                         vat = x.getMaSanPham().getVat() == 1 ? (x.getMaSanPham().getGianhap() * 2.5 * 0.05) : 0;
 
                         soLuong += x.getSoLuongSP();
                         i++;
-
+                        if(x.getMaSanPham().getKhuyenMai() == null)
+                            giaTri = 0;
+                        else
+                            giaTri = x.getMaSanPham().getKhuyenMai().getPhanTramKhuyenMai();
                         tongTienSp += x.getMaSanPham().getGiaBan() != null ? x.getMaSanPham().getGiaBan() : 0;
                         // change the parameters passed to the detailsModel.addRow method
                         detailsModel.addRow(new Object[]{i, x.getMaSanPham().getTensp(), x.getMaSanPham().getMauSac().toString(),
                                 x.getMaSanPham().getSize().toString(), x.getMaSanPham().getChatLieu().getTenChatLieu(),
                                 tien.format(x.getMaSanPham().getGiaBan()), x.getSoLuongSP(), tien.format(vat),
 
-                                x.getMaSanPham().getKhuyenMai().getPhanTramKhuyenMai(),
+                                giaTri,
                                 tien.format(x.getSoLuongSP() * x.getMaSanPham().getGiaBan())});
                     }
                     txtTongSL.setText(soLuong + "");

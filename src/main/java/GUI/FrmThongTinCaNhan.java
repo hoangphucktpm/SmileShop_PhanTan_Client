@@ -16,7 +16,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,8 +44,8 @@ public class FrmThongTinCaNhan extends JFrame implements ActionListener {
     private JTextField txtMatKhauMoi;
     private JLabel lblTieuDeTrang;
     private JTextField txtChucVu;
-    private NhanVienDao dao = new NhanVienImpl();
-    private ThongTinCaNhanDao ttDao = new ThongTinCaNhanImpl();
+    private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+    private ThongTinCaNhanDao ttDao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
     private JButton btnCapNhat;
     private JRadioButton rdHienMatKhau;
     private JButton btnLuu;
@@ -64,8 +66,7 @@ public class FrmThongTinCaNhan extends JFrame implements ActionListener {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    ThongTinCaNhanDao thongTinCaNhanDao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
-                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+
                     FrmThongTinCaNhan frame = new FrmThongTinCaNhan("");
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -78,7 +79,7 @@ public class FrmThongTinCaNhan extends JFrame implements ActionListener {
     /**
      * Create the frame.
      */
-    public FrmThongTinCaNhan(String username) throws RemoteException {
+    public FrmThongTinCaNhan(String username) throws RemoteException, MalformedURLException, NotBoundException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         setSize(1347, 843);

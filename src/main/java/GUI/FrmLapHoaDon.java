@@ -23,7 +23,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -71,11 +73,11 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
     private JButton btnXoaAll;
     public static TaiKhoan taiKhoan;
     public static int i = 0;
-    private LapHoaDonDao LHD_dao = new LapHoaDonImpl();
+    private LapHoaDonDao LHD_dao = (LapHoaDonDao) Naming.lookup(URL + "LapHoaDonDao");
     private FrmXuatHoaDon frmXuatHD = new FrmXuatHoaDon();
-    private XemHoaDonDao xem_dao = new XemHoaDonImpl();
-    private NhanVienDao dao = new NhanVienImpl();
-    private SanPhamDao daoSP = new SanPhamImpl();
+        private XemHoaDonDao xem_dao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
+    private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+    private SanPhamDao daoSP = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;
     public JTable table_CTHD;
     private JTextField txtSoLuong;
 
@@ -139,10 +141,6 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    LapHoaDonDao lapHoaDonDao = (LapHoaDonDao) Naming.lookup(URL + "LapHoaDonDao");
-                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
-                    SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
-                    XemHoaDonDao xemHoaDonDao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
                     FrmLapHoaDon frame = new FrmLapHoaDon();
                     frame.setVisible(true);
 
@@ -156,7 +154,7 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
     /**
      * Create the frame.
      */
-    public FrmLapHoaDon() throws RemoteException {
+    public FrmLapHoaDon() throws RemoteException, MalformedURLException, NotBoundException {
         pnlThongTin = new JPanel();
         getContentPane().setBackground(new Color(129, 250, 243));
         getContentPane().setLayout(null);

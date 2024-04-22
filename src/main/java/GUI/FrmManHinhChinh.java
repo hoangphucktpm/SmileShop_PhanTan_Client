@@ -64,7 +64,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
     private Label ID;
     private String tennv;
 
-    private NhanVienDao dao = new NhanVienImpl();
+    private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
     private JTextField lblTenDangNhap;
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private Label lblThongTinCaNhan;
@@ -82,7 +82,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
 
     public static void main(String[] args) {
         try {
-            NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
             FrmManHinhChinh frame = new FrmManHinhChinh("");
             frame.setVisible(true);
         } catch (Exception e) {
@@ -653,14 +652,14 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
                     try {
                         FrmDangNhap frmDN = new FrmDangNhap();
                         frmDN.setVisible(true);
-                    } catch (RemoteException e1) {
+                    } catch (RemoteException | MalformedURLException | NotBoundException e1) {
                         e1.printStackTrace();
                         // Handle the exception (e.g., show an error message to the user)
                     }
                 }
 
             }
-        } catch (RemoteException e1) {
+        } catch (RemoteException | MalformedURLException | NotBoundException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }

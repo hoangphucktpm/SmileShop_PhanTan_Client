@@ -2,7 +2,6 @@ package GUI;
 
 import DAOTest.KhachHangDao;
 import DAOTest.impl.KhachHangImpl;
-import Database.ConnectDatabase;
 import Entities.KhachHang;
 import Entities.LoaiKhachHang;
 import com.toedter.calendar.JDateChooser;
@@ -17,9 +16,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -89,7 +91,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
     private JLabel lblLoi_CCCD;
     private JLabel lblLoi_NgaySinh;
 
-    private KhachHangDao khachHangImpl = new KhachHangImpl();
+    private KhachHangDao khachHangImpl = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");;
     List<LoaiKhachHang> listLKH = khachHangImpl.getAllLoaiKH();
     private static final String URL = "rmi://HOANGPHUC:6541/";
 
@@ -100,8 +102,6 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    KhachHangDao khachHangDao = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");
-                    ConnectDatabase.getInstance().connect();
                     FrmKhachHang frame = new FrmKhachHang();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -111,7 +111,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
         });
     }
 
-    public FrmKhachHang() throws RemoteException {
+    public FrmKhachHang() throws RemoteException, MalformedURLException, NotBoundException {
 
         setTitle("Quản lí cửa hàng");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -515,6 +515,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 
     private void docDuLieu() {
         try {
+            Format ngaySinh = new SimpleDateFormat("dd/MM/yyyy");
             List<KhachHang> list = khachHangImpl.getAllKH();
             LoaiKhachHang loaiKH = new LoaiKhachHang();
             for (KhachHang khachHang : list) {
@@ -535,7 +536,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
                 String loaiKhachHang = khachHangImpl.getLoaiKH(khachHang.getMaKH());
 
                 tablemodel.addRow(new Object[]{khachHang.getMaKH(), khachHang.getTenKH(), gioiTinhText,
-                        khachHang.getSdt(), khachHang.getCccd(), khachHang.getNgaySinh(), khachHang.getEmail(),
+                        khachHang.getSdt(), khachHang.getCccd(), ngaySinh.format(khachHang.getNgaySinh()), khachHang.getEmail(),
                         khachHang.getDiaChi(), diemTichLuy, loaiKhachHang});
             }
             table_1.setModel(tablemodel);
@@ -630,7 +631,6 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
         txtDiaChi.setText(tablemodel.getValueAt(row, 7).toString());
         txtDTL.setText(tablemodel.getValueAt(row, 8).toString());
         cboLoaiKhachHang.setSelectedItem(tablemodel.getValueAt(row, 9).toString());
-//		updateCBBox();
         List<KhachHang> list = null;
         try {
             list = khachHangImpl.getAllKH();
@@ -679,10 +679,6 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
     public void updateCBBox() throws RemoteException {
         cboLoaiKhachHang.removeAllItems();
 
-//		for (KhachHang n : listN) {
-//			comboBox.addItem(n.getLoaiKH().getMaLoai());
-//
-//		}
         List<LoaiKhachHang> kh = khachHangImpl.getAllLoaiKH();
         HashSet<String> lkh = new HashSet<>();
 
@@ -792,18 +788,12 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
                     KhachHang khachHang = new KhachHang(MaKH, tenKH, Sdt, CCCD, ngaySinh, diaChi, gioiTinh, selectedLoaiKhachHang, email, dtluy);
                     boolean newL = khachHangImpl.addKhachHang(khachHang);
                     if (newL == true) {
-                        btnThem.setText("Thêm");
                         xoaTrang();
                         deleteAllDataTable();
                         docDuLieu();
                         txtMaKH.setText(deFaultID());
                         chkSua = false;
-                        chkThem = false;
-                        lock = false;
                         btnSua.setIcon(new ImageIcon("Anh\\sua.png"));
-                        btnThem.setIcon(new ImageIcon("Anh\\them.png"));
-                        btnSua.setEnabled(true);
-                        btnThem.setEnabled(true);
                         JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công");
 
                     } else
@@ -825,13 +815,9 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
                 khach.setDiemTichLuy(dlLuyNew);
                 khach.setLoaiKH(selectedLoaiKhachHang);
                 khach.setDiemTichLuy(dtluy);
-
-
-                System.out.println(khach);
                 boolean newL = khachHangImpl.updateKhachHang(khach);
                 if (newL) {
                     btnSua.setText("Sửa");
-                    // Cập nhật dữ liệu bảng trước khi hiển thị thông báo thành công
                     deleteAllDataTable();
                     docDuLieu();
                     xoaTrang();
@@ -839,13 +825,13 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
                     chkSua = false;
                     chkThem = false;
                     lock = false;
+                    khoaTXT(lock);
                     btnSua.setIcon(new ImageIcon("Anh\\sua.png"));
                     btnThem.setIcon(new ImageIcon("Anh\\them.png"));
                     btnSua.setEnabled(true);
                     btnThem.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Cập nhật không thành công");
-
                 }
             }
 

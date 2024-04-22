@@ -1,5 +1,6 @@
 package GUI;
 
+import DAOTest.NhaCungCapDao;
 import DAOTest.NhanVienDao;
 import DAOTest.impl.NhanVienImpl;
 import Entities.TaiKhoan;
@@ -8,7 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class FrmDangNhap extends JFrame implements ActionListener {
@@ -24,7 +27,7 @@ public class FrmDangNhap extends JFrame implements ActionListener {
 
     public static TaiKhoan taiKhoan;
     private JRadioButton rdHienMK;
-    private NhanVienDao dao = new NhanVienImpl();
+    private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
     public static boolean TrangThaiDangNhapNhanVien = false;
     public static boolean TrangThaiDangNhapQuanLy = false;
     private String tenTaiKhoanAdmin = "ADMIN";
@@ -41,7 +44,6 @@ public class FrmDangNhap extends JFrame implements ActionListener {
             public void run() {
                 try {
                     FrmDangNhap frame = new FrmDangNhap();
-                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -53,7 +55,7 @@ public class FrmDangNhap extends JFrame implements ActionListener {
     /**
      * Create the frame.
      */
-    public FrmDangNhap() throws RemoteException {
+    public FrmDangNhap() throws RemoteException, MalformedURLException, NotBoundException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 400);
         contentPane = new JPanel();
@@ -177,7 +179,7 @@ public class FrmDangNhap extends JFrame implements ActionListener {
             } else if (o.equals(btnLamMoi)) {
                 lammoi();
             }
-        } catch (RemoteException e1) {
+        } catch (RemoteException | MalformedURLException | NotBoundException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }

@@ -17,7 +17,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -42,7 +44,18 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     private JTextField txtDiaChi;
     private JPanel contentPane;
     private JLabel lblTieuDeTrang;
-    private NhanVienDao dao = new NhanVienImpl();
+    private NhanVienDao dao;
+
+    {
+        try {
+            dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private DefaultTableModel tablemodel;
     private JTable table_DSKH;
     private JDateChooser txtNgay;
@@ -124,7 +137,6 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    NhanVienDao nhanVienDao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
                     FrmNhanVien frame = new FrmNhanVien();
                     frame.setVisible(true);
                 } catch (Exception e) {
