@@ -141,7 +141,6 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
                     KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
                     NhaCungCapDao nhaCungCapDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");
                     SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
-
                     FrmSanPham frame = new FrmSanPham();
                     frame.setVisible(true);
                 } catch (Exception e) {

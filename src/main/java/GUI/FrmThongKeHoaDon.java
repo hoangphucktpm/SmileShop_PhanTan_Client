@@ -28,6 +28,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -66,29 +69,30 @@ public class FrmThongKeHoaDon extends JFrame implements ActionListener {
     private JTextField textHDDL;
     private JTextField textSPDB;
     private JTextField textTT;
-    private NhanVienDao daoNV = new NhanVienImpl();
     private JPanel pnlBieuDo;
     public ChartPanel chartPanel;
     private int day;
     private int month;
     private int year;
 
-    private FrmXuatThongKe frmInTK = new FrmXuatThongKe();
     private JButton btnInThongKe;
+    private FrmXuatThongKe frmInTK = new FrmXuatThongKe();
 
-    private ThongKeHoaDonDao daoImpl = new ThongKeHoaDonImpl();
+    private NhanVienDao daoNV = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+    private ThongKeHoaDonDao daoImpl = (ThongKeHoaDonDao) Naming.lookup(URL + "ThongKeHoaDonDao");
     private static final String URL = "rmi://HOANGPHUC:6541/";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedURLException, NotBoundException {
         try {
             FrmThongKeHoaDon frm = new FrmThongKeHoaDon();
+
             frm.setVisible(true);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public FrmThongKeHoaDon() throws RemoteException {
+    public FrmThongKeHoaDon() throws RemoteException, MalformedURLException, NotBoundException {
 
         pnlThongTin = new JPanel();
         getContentPane().setBackground(new Color(129, 250, 243));

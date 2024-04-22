@@ -27,6 +27,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -77,7 +80,6 @@ public class    FrmThongKeDoanhThu extends JFrame implements ActionListener {
     DecimalFormat tien = new DecimalFormat("#,##0");
     DecimalFormat tienSo = new DecimalFormat("###0");
 
-    private NhanVienDao daoNV = new NhanVienImpl();
     private ButtonGroup gr;
     private ButtonGroup grChuc;
     private JPanel pnlBieuDo;
@@ -93,25 +95,26 @@ public class    FrmThongKeDoanhThu extends JFrame implements ActionListener {
     private int nam;
     private double tienMua;
     private JLabel lblTienKhuyenMai;
+    private NhanVienDao daoNV = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
+    private ThongKeDoanhThuDao daoTKDTImpl = (ThongKeDoanhThuDao) Naming.lookup(URL + "ThongKeDoanhThuDao");
 
-    private ThongKeDoanhThuDao daoTKDTImpl = new ThongKeDoanhThuImpl();
 
     private static final String URL = "rmi://HOANGPHUC:6541/";
 
-
-
     public static void main(String[] args) {
         try {
+                 FrmThongKeDoanhThu frm = new FrmThongKeDoanhThu();
 
-            FrmThongKeDoanhThu frm = new FrmThongKeDoanhThu();
-            frm.setVisible(true);
-        } catch (RemoteException e) {
+                frm.setVisible(true);
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public FrmThongKeDoanhThu() throws RemoteException {
+
+
+    public FrmThongKeDoanhThu() throws RemoteException, MalformedURLException, NotBoundException {
         pnlThongTin = new JPanel();
         pnlThongTin.setBorder(new LineBorder(new Color(0, 0, 0)));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -119,8 +122,6 @@ public class    FrmThongKeDoanhThu extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setResizable(false);
         getContentPane().setLayout(null);
-
-
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBounds(0, 0, 1328, 806);
         getContentPane().add(pnlThongTin);

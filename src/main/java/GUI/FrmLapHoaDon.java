@@ -1231,7 +1231,7 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
             } else {
                 // Handle the case where khuyenMai is null
             }
-            int km = Integer.parseInt(null);
+            int km = 0;
             try {
                 km = LHD_dao.getKMTheoPhanTram(TenKm);
             } catch (RemoteException e) {

@@ -13,7 +13,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListener {
@@ -88,7 +90,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
         }
     }
 
-    public FrmManHinhChinh(String username) throws RemoteException {
+    public FrmManHinhChinh(String username) throws RemoteException, MalformedURLException, NotBoundException {
         setTitle("CỬA HÀNG THỜI TRANG SMILE");
         getContentPane().setForeground(new Color(0, 0, 0));
         getContentPane().setBackground(new Color(255, 255, 255));

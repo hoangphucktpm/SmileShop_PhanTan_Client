@@ -1,5 +1,6 @@
 package GUI;
 
+import DAOTest.ThongKeHoaDonDao;
 import DAOTest.TinhTrangSanPhamDao;
 import DAOTest.impl.TinhTrangSanPhamImpl;
 import Entities.ThongKeSanPham;
@@ -25,6 +26,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -63,7 +67,8 @@ public class FrmThongKeTinhTrangSP extends JFrame implements ActionListener {
     private JPanel pnlBieuDo;
     private ChartPanel chartPanel;
 
-    private TinhTrangSanPhamDao daoImpl = new TinhTrangSanPhamImpl();
+    private TinhTrangSanPhamDao daoImpl = (TinhTrangSanPhamDao) Naming.lookup(URL + "TinhTrangSanPhamDao");
+
 
 
     DecimalFormat tien = new DecimalFormat("#,##0");
@@ -91,7 +96,7 @@ public class FrmThongKeTinhTrangSP extends JFrame implements ActionListener {
     /**
      * Create the frame.
      */
-    public FrmThongKeTinhTrangSP() throws RemoteException {
+    public FrmThongKeTinhTrangSP() throws RemoteException, MalformedURLException, NotBoundException {
         pnlThongTin = new JPanel();
         getContentPane().setBackground(new Color(129, 250, 243));
         getContentPane().setLayout(null);
