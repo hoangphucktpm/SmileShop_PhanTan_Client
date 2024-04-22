@@ -97,7 +97,7 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
     private JButton btnLuu;
 
     private List<String> selectedRowsValues = new ArrayList<>();
-    private static final String URL = "rmi://HOANGPHUC:6541/";
+    private static final String URL = "rmi://192.168.1.33:6541/";
 
 
     public static void main(String[] args) {
