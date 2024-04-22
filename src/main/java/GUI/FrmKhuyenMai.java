@@ -4,7 +4,6 @@ import DAOTest.KhuyenMaiDao;
 import DAOTest.SanPhamDao;
 import DAOTest.impl.KhuyenMaiImpl;
 import DAOTest.impl.SanPhamImpl;
-import Database.ConnectDatabase;
 import Entities.KhuyenMai;
 import Entities.SanPham;
 import com.toedter.calendar.JDateChooser;
@@ -106,7 +105,6 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
                     KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
                     SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");
 
-                    ConnectDatabase.getInstance().connect();
                     FrmKhuyenMai frame = new FrmKhuyenMai();
                     frame.setVisible(true);
                 } catch (Exception e) {
