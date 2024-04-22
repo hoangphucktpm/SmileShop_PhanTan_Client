@@ -684,7 +684,6 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
                 }
             } else if (chkSua == true && chkThem == false) {
                 if (km != null) {
-                    KhuyenMaiDao kmDao = new KhuyenMaiImpl();
                     kmDao.capNhatNull(maKM);
                     for (String maSPAP : selectedRowsValues) {
                         kmDao.adDSPKM(maSPAP, maKM);
@@ -706,6 +705,8 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
             chkSua = false;
             chkThem = false;
             lock = false;
+            docDuLieu();
+            docDuLieuSP();
             khoaText(lock);
             btnSua.setText("Sửa");
             btnSua.setIcon(new ImageIcon("Anh\\sua.png"));
@@ -742,7 +743,7 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
         LocalDate ngaybdLocalDate = ngaybd.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate ngayktLocalDate = ngaykt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        return new KhuyenMai(txtMaKM.getText().trim(), tenkm, phanTram, ngaybdLocalDate, ngayktLocalDate, 0, 0);
+        return new KhuyenMai(txtMaKM.getText().trim(), tenkm, phanTram, ngaybdLocalDate, ngayktLocalDate, 0, selectedRowsValues.size());
     }
 
 
@@ -791,9 +792,8 @@ public class FrmKhuyenMai extends JFrame implements ActionListener, MouseListene
             table_SP.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
             table_SP.getColumnModel().getColumn(2).setCellRenderer(table_SP.getDefaultRenderer(Boolean.class));
 
-//            boolean isPromoted = x.getKhuyenMai() != null && x.getKhuyenMai().getTrangThai() == 1;
-
-            tablemodel.addRow(new Object[]{x.getMaSp(), x.getTensp(), null});
+            tablemodel.addRow(new Object[] { x.getMaSp(), x.getTensp(),
+                    x.getKhuyenMai() == null ? false : true });
         }
     }
 

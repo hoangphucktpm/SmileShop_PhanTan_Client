@@ -3,9 +3,7 @@ package GUI;
 import DAOTest.KhachHangDao;
 import DAOTest.SanPhamDao;
 import DAOTest.XemHoaDonDao;
-import DAOTest.impl.KhachHangImpl;
-import DAOTest.impl.SanPhamImpl;
-import DAOTest.impl.XemHoaDonImpl;
+
 import Entities.CtHoadon;
 import Entities.HoaDon;
 import Entities.SanPham;
@@ -356,8 +354,11 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
                     int giaTri = 0;
                     double vat = 0;
                     for (CtHoadon x : list) {
-                        vat = x.getMaSanPham().getVat() == 1 ? (x.getMaSanPham().getGianhap() * 2.5 * 0.05) : 0;
-
+                        if (x.getMaSanPham().getVat() == 1) {
+                            vat = (x.getMaSanPham().getGianhap() * 2.5 * 0.05);
+                        } else {
+                            vat = 0;
+                        }
                         soLuong += x.getSoLuongSP();
                         i++;
                         if(x.getMaSanPham().getKhuyenMai() == null)
@@ -365,7 +366,6 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
                         else
                             giaTri = x.getMaSanPham().getKhuyenMai().getPhanTramKhuyenMai();
                         tongTienSp += x.getMaSanPham().getGiaBan() != null ? x.getMaSanPham().getGiaBan() : 0;
-                        // change the parameters passed to the detailsModel.addRow method
                         detailsModel.addRow(new Object[]{i, x.getMaSanPham().getTensp(), x.getMaSanPham().getMauSac().toString(),
                                 x.getMaSanPham().getSize().toString(), x.getMaSanPham().getChatLieu().getTenChatLieu(),
                                 tien.format(x.getMaSanPham().getGiaBan()), x.getSoLuongSP(), tien.format(vat),

@@ -27,6 +27,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
     private JMenuBar menuBar_NhaCungCap;
     private JMenuBar menuBar_HoaDon;
     private JMenuBar menuBar_DangXuat;
+    private FrmSanPham frmSP = new FrmSanPham();
     private FrmNhaCungCap frmTK = new FrmNhaCungCap();
     private FrmLapHoaDon frmLHĐ = new FrmLapHoaDon();
     private FrmTroGiup frmTG = new FrmTroGiup();
@@ -515,6 +516,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
                 tabbedPane.remove(tabbedPane.getSelectedComponent());
                 tabbedPane.add(frmSanPham.getContentPane());
                 tabbedPane.setSelectedComponent(frmSanPham.getContentPane());
+                frmSP.docDuLieu();
             }
 
             @Override
