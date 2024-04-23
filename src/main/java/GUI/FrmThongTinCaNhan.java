@@ -57,7 +57,7 @@ public class FrmThongTinCaNhan extends JFrame implements ActionListener {
     boolean check = false;
 
 
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
 
     /**
      * Launch the application.

@@ -1,9 +1,6 @@
 package GUI;
 
-import DAOTest.LapHoaDonDao;
-import DAOTest.NhanVienDao;
-import DAOTest.SanPhamDao;
-import DAOTest.XemHoaDonDao;
+import DAOTest.*;
 import DAOTest.impl.LapHoaDonImpl;
 import DAOTest.impl.NhanVienImpl;
 import DAOTest.impl.SanPhamImpl;
@@ -78,6 +75,7 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
         private XemHoaDonDao xem_dao = (XemHoaDonDao) Naming.lookup(URL + "XemHoaDonDao");
     private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");
     private SanPhamDao daoSP = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;
+    private KhuyenMaiDao daoKM = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
     public JTable table_CTHD;
     private JTextField txtSoLuong;
 
@@ -134,7 +132,7 @@ public class FrmLapHoaDon extends JFrame implements ActionListener, MouseListene
     private JLabel lblloisdt;
     private JLabel lblloihd;
 
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
 
 
     public static void main(String[] args) {
@@ -620,7 +618,11 @@ private static final String URL = "rmi://192.168.1.16:6541/";
         } else if (o.equals(btnThanhToan)) {
             thanhToan();
         } else if (o.equals(cboTimSP)) {
-            chonSanPham();
+            try {
+                chonSanPham();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
         } else if (o.equals(btnXoaAll)) {
             XoatrangthanhTK();
             xoaSLSanPham();
@@ -832,24 +834,23 @@ private static final String URL = "rmi://192.168.1.16:6541/";
                                 } catch (Exception e) {
                                     x = null;
                                 }
-                                KhuyenMai khuyenMai = x.getKhuyenMai();
-                                String TenKm = null;
-                                if (khuyenMai != null) {
-                                    TenKm = null;
-                                    try {
-                                        TenKm = LHD_dao.getKMTheoTen(khuyenMai.getMaKhuyenMai());
-                                    } catch (Exception e) {
-                                        TenKm = null;
-                                    }
-                                } else {
-                                    // Handle the case where khuyenMai is null
-                                }
+//                                KhuyenMai khuyenMai = x.getKhuyenMai();
+//                                String TenKm = null;
+//                                if (khuyenMai != null) {
+//                                    TenKm = null;
+//                                    try {
+//                                        TenKm = LHD_dao.getKMTheoTen(khuyenMai.getMaKhuyenMai());
+//                                    } catch (Exception e) {
+//                                        TenKm = null;
+//                                    }
+//                                } else {
+//                                    // Handle the case where khuyenMai is null
+//                                }
+                                String checkKM = daoKM.layKhuyenMaiTuSanPham(x.getMaSp());
                                 int km = 0;
-                                try {
-                                    km = LHD_dao.getKMTheoPhanTram(TenKm);
-                                } catch (Exception e) {
-                                    km = 0;
-                                }
+                                if(checkKM != null)
+                                    km = LHD_dao.getKMTheoPhanTram(checkKM);
+
                                 double giaBan = x.getGiaBan();
                                 double soTienKhuyenMai = ((giaBan * km) / 100);
                                 double tienKM = 0;
@@ -995,6 +996,7 @@ private static final String URL = "rmi://192.168.1.16:6541/";
             }
         }
     }
+
 
     public void updateComBoBox() throws RemoteException {
         List<SanPham> list = daoSP.getAllSP();
@@ -1199,7 +1201,7 @@ private static final String URL = "rmi://192.168.1.16:6541/";
     }
 
     //	    Lấy sản phẩm để bán
-    public void chonSanPham() {
+    public void chonSanPham() throws RemoteException {
         String selectedMaSP = cboTimSP.getSelectedItem().toString();
 
         DefaultTableModel tablemodel = (DefaultTableModel) table_SP.getModel();
@@ -1217,23 +1219,12 @@ private static final String URL = "rmi://192.168.1.16:6541/";
             String vatStatus = (vatValue == 1) ? "Có (5%)" : "Không";
 
             double giaBan = x.getGiaBan();
-            KhuyenMai khuyenMai = x.getKhuyenMai();
+            String checkKM = daoKM.layKhuyenMaiTuSanPham(x.getMaSp());
             String TenKm = null;
-            if (khuyenMai != null) {
-                TenKm = null;
-                try {
-                    TenKm = LHD_dao.getKMTheoTen(khuyenMai.getMaKhuyenMai());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // Handle the case where khuyenMai is null
-            }
             int km = 0;
-            try {
-                km = LHD_dao.getKMTheoPhanTram(TenKm);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+            if (checkKM != null) {
+                km = LHD_dao.getKMTheoPhanTram(checkKM);
+
             }
 
             for (int i = 0; i < table_CTHD.getRowCount(); i++) {
@@ -1249,7 +1240,7 @@ private static final String URL = "rmi://192.168.1.16:6541/";
             }
             if (x.getMaSp().equals(selectedMaSP)) {
                 tablemodel.addRow(new Object[]{x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getMaLoaiSP(), x.getMauSac(),
-                        x.getSize(), x.getChatLieu().getMaChatLieu(), soLuong, tien.format(giaBan), vatStatus, km});
+                        x.getSize(), x.getChatLieu().getMaChatLieu(), soLuong, tien.format(giaBan), vatStatus, km + "%"});
                 table_SP.selectAll();
             }
         }

@@ -1,6 +1,7 @@
 package client;
 
 
+import DAOTest.KhuyenMaiDao;
 import DAOTest.NhaCungCapDao;
 import DAOTest.NhanVienDao;
 import Entities.NhaCungCap;
@@ -12,11 +13,11 @@ import java.util.Scanner;
 
 public class Client {
 
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
 
     public static void main(String[] args) {
         try {
-            NhaCungCapDao nhaCungCapDao = (NhaCungCapDao) Naming.lookup(URL + "NhaCungCapDao");
+            KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
             Scanner scanner = new Scanner(System.in);
             int option;
 
@@ -31,10 +32,9 @@ private static final String URL = "rmi://192.168.1.16:6541/";
 
                 // 1 - Tìm ra all nhân viên theo công ty
                 while (option == 1) {
+                    System.out.println("Phần trăm khuyến mãi theo mã khuyến mãi: ");
+                    System.out.println(khuyenMaiDao.getKMTHeoMa("KM001"));
 
-                    //         return "NhaCungCap{maNhaCungCap='" + this.maNhaCungCap + "', tenNhaCungCap='" + this.tenNhaCungCap + "', sdt='" + this.sdt + "', email='" + this.email + "', diaChi='" + this.diaChi + "', tinhTrang=" + this.tinhTrang + "}";
-                    NhaCungCap nhaCungCap = new NhaCungCap("NCC222", "Nha Cung Cap 1", "0123456789", "hi@gmail.com", "Dia Chi", 1);
-                    nhaCungCapDao.them(nhaCungCap);
                     break;
                 }
 

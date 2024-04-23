@@ -1,6 +1,7 @@
 package GUI;
 
 import DAOTest.KhachHangDao;
+import DAOTest.LapHoaDonDao;
 import DAOTest.impl.KhachHangImpl;
 import Entities.KhachHang;
 import Entities.LoaiKhachHang;
@@ -91,9 +92,10 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
     private JLabel lblLoi_CCCD;
     private JLabel lblLoi_NgaySinh;
 
-    private KhachHangDao khachHangImpl = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");;
+    private KhachHangDao khachHangImpl = (KhachHangDao) Naming.lookup(URL + "KhachHangDao");
+    private LapHoaDonDao lapHoaDonImpl = (LapHoaDonDao) Naming.lookup(URL + "LapHoaDonDao");
     List<LoaiKhachHang> listLKH = khachHangImpl.getAllLoaiKH();
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
 
     /**
      * Launch the application.
@@ -520,7 +522,8 @@ private static final String URL = "rmi://192.168.1.16:6541/";
             LoaiKhachHang loaiKH = new LoaiKhachHang();
             for (KhachHang khachHang : list) {
                 String gioiTinhText = dinhDangGTImpl(khachHang);
-                float diemTichLuy = khachHang.getDiemTichLuy();
+//                float diemTichLuy = khachHang.getDiemTichLuy();
+                float diemTichLuy = lapHoaDonImpl.getDiem(khachHang.getSdt());
                 List<KhachHang> listKH = khachHangImpl.getKH5KPoint();
                 List<LoaiKhachHang> listLoaiKhachHang = khachHangImpl.getAllLoaiKH();
                 LoaiKhachHang selectedLoaiKhachHang = listLoaiKhachHang.get(1);

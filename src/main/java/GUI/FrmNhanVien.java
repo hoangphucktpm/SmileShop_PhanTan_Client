@@ -85,7 +85,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     private JTextField txtDiaChi;
     private JPanel contentPane;
     private JLabel lblTieuDeTrang;
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
     private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");;
     private DefaultTableModel tablemodel;
     private JTable table_DSKH;

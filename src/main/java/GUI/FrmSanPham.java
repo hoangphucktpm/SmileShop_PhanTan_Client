@@ -133,7 +133,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
     private JLabel lblLoi_Ngay;
     private JLabel lblGiaNhap;
 
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
 
 
     /**
@@ -1161,8 +1161,7 @@ private static final String URL = "rmi://192.168.1.16:6541/";
     }
 
     //	cập nhật các comboBox
-    public void updateComboBox() {
-        try {
+    public void updateComboBox() throws RemoteException {
 
             cboLoaiSP.removeAllItems();
             cboChatLieu.removeAllItems();
@@ -1170,12 +1169,9 @@ private static final String URL = "rmi://192.168.1.16:6541/";
             cboColor.removeAllItems();
             cboSize.removeAllItems();
             List<SanPham> sp = sanPhamDao.getAllSP();
-
-
             for (LoaiSanPham l : listSP) {
                 cboLoaiSP.addItem(l.getTenLoaiSP());
             }
-
             for (ChatLieu c : listCL) {
                 cboChatLieu.addItem(c.getTenChatLieu() + "(" + c.getMoTa() + ")");
             }
@@ -1184,9 +1180,7 @@ private static final String URL = "rmi://192.168.1.16:6541/";
                 cboNhaCungCap.addItem(n.getTenNhaCungCap());
             }
 
-
             Arrays.stream(MauSac.values()).forEach(mau -> cboColor.addItem(mau));
-
             Arrays.stream(Size.values()).forEach(size -> cboSize.addItem(size));
             cboDVT.removeAllItems();
             HashSet<String> dvt = new HashSet<>();
@@ -1195,14 +1189,9 @@ private static final String URL = "rmi://192.168.1.16:6541/";
                 String d = s.getDonViTinh();
                 dvt.add(d);
             }
-
             for (String donViTinh : dvt) {
                 cboDVT.addItem(donViTinh);
             }
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     public void updateCBBoxTim() {
@@ -1265,7 +1254,6 @@ private static final String URL = "rmi://192.168.1.16:6541/";
                     }
                 }
                 //
-
             }
             if (rdTimSize.isSelected()) {
                 for (Size size : Size.values()) {

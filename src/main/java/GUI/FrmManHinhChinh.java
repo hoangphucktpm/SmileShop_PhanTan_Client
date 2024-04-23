@@ -78,7 +78,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener, MenuListe
     private JMenuBar menuBar_KhuyenMai;
     private JToolBar toolBar;
 
-private static final String URL = "rmi://192.168.1.16:6541/";
+private static final String URL = "rmi://192.168.1.15:6541/";
 
 
     public static void main(String[] args) {
