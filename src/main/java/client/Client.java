@@ -4,6 +4,7 @@ package client;
 import DAOTest.KhuyenMaiDao;
 import DAOTest.NhaCungCapDao;
 import DAOTest.NhanVienDao;
+import DAOTest.ThongTinCaNhanDao;
 import Entities.NhaCungCap;
 import Entities.NhanVien;
 
@@ -18,6 +19,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
     public static void main(String[] args) {
         try {
             KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
+            ThongTinCaNhanDao thongTinCaNhanDao = (ThongTinCaNhanDao) Naming.lookup(URL + "ThongTinCaNhanDao");
             Scanner scanner = new Scanner(System.in);
             int option;
 
@@ -32,8 +34,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
 
                 // 1 - Tìm ra all nhân viên theo công ty
                 while (option == 1) {
-                    System.out.println("Phần trăm khuyến mãi theo mã khuyến mãi: ");
-                    System.out.println(khuyenMaiDao.getKMTHeoMa("KM001"));
+                    System.out.println(thongTinCaNhanDao.loadTaiKhoan("NV005"));
 
                     break;
                 }
