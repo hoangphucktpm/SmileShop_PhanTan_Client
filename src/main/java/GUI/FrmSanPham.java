@@ -853,7 +853,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                 else
                     km = kmDao.layTenKMTheoMa(checkKM);
                 tablemodel.addRow(new Object[] { d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                        tien.format(x.getGianhap()), sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize().toString(), x.getMauSac().nCo, x.getDonViTinh(),
                         km, VAT, sta,tien.format(giaBanKM) });
             }
@@ -1576,7 +1576,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                             if(x.getKhuyenMai() != null)
                                 khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                             tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                    tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                    tien.format(x.getGianhap()), sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                     x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                     , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                     khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1595,7 +1595,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                             double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                             tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                    tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                    tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                     x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                     tien.format(giaBan)});
                         }
@@ -1636,7 +1636,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                             if(x.getKhuyenMai() != null)
                                 khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                             tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                    tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                    tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                     x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                     , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                     khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1655,7 +1655,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                             double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                             tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                    tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                    tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                     x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                     tien.format(giaBan)});
                         }
@@ -1685,7 +1685,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 if (x.getKhuyenMai() != null)
                                     khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                         , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                         khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1704,7 +1704,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                         tien.format(giaBan)});
                             }
@@ -1736,7 +1736,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 if(x.getKhuyenMai() != null)
                                     khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                                 tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                         , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                         khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1755,7 +1755,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                         tien.format(giaBan)});
                             }
@@ -1786,7 +1786,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 if(x.getKhuyenMai() != null)
                                     khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                                 tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                         , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                         khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1805,7 +1805,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                         tien.format(giaBan)});
                             }
@@ -1836,7 +1836,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 if(x.getKhuyenMai() != null)
                                     khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                                 tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                         , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                         khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1855,7 +1855,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                         tien.format(giaBan)});
                             }
@@ -1888,7 +1888,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 if(x.getKhuyenMai() != null)
                                     khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                                 tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                         , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                         khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1907,7 +1907,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                         tien.format(giaBan)});
                             }
@@ -1939,7 +1939,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 if(x.getKhuyenMai() != null)
                                     khuyenMai = x.getKhuyenMai().getTenKhuyenMai();
                                 tablemodel.addRow(new Object[]{d++,x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), x.getNgaynhap(), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")"
                                         , x.getSize(), x.getMauSac(), x.getDonViTinh(),
                                         khuyenMai, VAT, sta, tien.format(giaBanKM)});
@@ -1958,7 +1958,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
                                 double giaBan = tinhGiaBan(x.getGianhap()) + VAT;
 
                                 tablemodel.addRow(new Object[]{d++, x.getMaSp(), x.getTensp(), x.getLoaiSanPham().getTenLoaiSP(),
-                                        tien.format(x.getGianhap()), x.getSoluong(), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
+                                        tien.format(x.getGianhap()),  sanPhamDao.getSoluongSP(x.getMaSp()), ngaynhap.format(x.getNgaynhap()), x.getNhaCungCap().getTenNhaCungCap(),
                                         x.getChatLieu().getTenChatLieu() + "(" + x.getChatLieu().getMoTa() + ")", x.getSize(), x.getMauSac(), x.getDonViTinh(), km, VAT, sta,
                                         tien.format(giaBan)});
                             }

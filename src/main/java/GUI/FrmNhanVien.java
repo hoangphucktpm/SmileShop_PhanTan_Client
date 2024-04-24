@@ -599,7 +599,12 @@ private static final String URL = "rmi://172.20.10.5:6541/";
 //        java.util.Date utilDate = (java.util.Date) tablemodel.getValueAt(row, 3);
 //        java.sql.Date ngaySinh = new java.sql.Date(utilDate.getTime());
 //        txtNgay.setDate(ngaySinh);
-        txtNgay.setDate(dao.getAllNV().get(row).getNgaySinh());
+        try {
+            txtNgay.setDate(dao.getAllNV().get(row).getNgaySinh());
+        } catch (RemoteException e1) {
+            e1.printStackTrace();
+            // Handle the exception
+        }
         txtCCCD.setText(tablemodel.getValueAt(row, 4).toString());
         txtSDT.setText(tablemodel.getValueAt(row, 5).toString());
         String cbGioiTinh = tablemodel.getValueAt(row, 6).toString();

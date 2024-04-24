@@ -383,7 +383,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
             txtTrangThai.setText(trangThaiText);
 
             TaiKhoan tk = ttDao.loadTaiKhoan(username);
-//            System.out.println(tk.getTenTaiKhoan().getMaNhanvien());
+            System.out.println(tk.getTenTaiKhoan().getMaNhanvien());
 
             txtTenTK.setText(tk.getTenTaiKhoan().getMaNhanvien());
             txtMauKhau.setText(tk.getMatKhau());

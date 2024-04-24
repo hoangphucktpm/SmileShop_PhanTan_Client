@@ -1214,7 +1214,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
             e.printStackTrace();
         }
         for (SanPham x : list) {
-            int soLuong = x.getSoluong();
+            int soLuong =  daoSP.getSoluongSP(x.getMaSp());
             float vatValue = x.getVat();
             String vatStatus = (vatValue == 1) ? "Có (5%)" : "Không";
 
@@ -1230,7 +1230,7 @@ private static final String URL = "rmi://172.20.10.5:6541/";
             for (int i = 0; i < table_CTHD.getRowCount(); i++) {
                 if (table_CTHD.getValueAt(i, 1).toString().equals(selectedMaSP)) {
                     try {
-                        soLuong = x.getSoluong() - (int) table_CTHD.getValueAt(i, 7);
+                        soLuong =  daoSP.getSoluongSP(x.getMaSp()) - (int) table_CTHD.getValueAt(i, 7);
                     } catch (Exception e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi: " + e.getMessage(), "Lỗi",
