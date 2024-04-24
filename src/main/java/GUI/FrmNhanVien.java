@@ -85,7 +85,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
     private JTextField txtDiaChi;
     private JPanel contentPane;
     private JLabel lblTieuDeTrang;
-private static final String URL = "rmi://192.168.1.15:6541/";
+private static final String URL = "rmi://172.20.10.5:6541/";
     private NhanVienDao dao = (NhanVienDao) Naming.lookup(URL + "NhanVienDao");;
     private DefaultTableModel tablemodel;
     private JTable table_DSKH;
@@ -683,10 +683,9 @@ private static final String URL = "rmi://192.168.1.15:6541/";
         rdNam.setSelected(true);
         rdĐangLam.setSelected(true);
 
-
-
         int d = 1;
         List<NhanVien> list = null;
+
         try {
             list = dao.getAllNV();
         } catch (RemoteException e) {
@@ -843,9 +842,10 @@ private static final String URL = "rmi://192.168.1.15:6541/";
                 }
             } else if (chkSua == true && chkThem == false) {
                 try {
+                    System.out.println(img);
                     if (img != null) {
                         if (dao.sua(maBanDau, tenNV, ngaySinhsql, Cccd, Sdt, gioiTinh, trangThai, caLamViec,
-                                chucVu, Email, diaChi, img, maNV)) {
+                                chucVu, img, Email, diaChi  , maNV)) {
                             xoaTrang();
                             deleteAllDataTable();
                             docDuLieu();
@@ -853,11 +853,10 @@ private static final String URL = "rmi://192.168.1.15:6541/";
                             JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công");
                             luuThanhCong();
                         } else
-                            JOptionPane.showMessageDialog(this, "Cập nhật nhân viên không thành công!");
+                            JOptionPane.showMessageDialog(this, "Cập nhật nhân viên không thành công sai cái gì đó!");
                     } else {
-                        boolean moi = dao.suakhonganh(maBanDau, tenNV, ngaySinhsql, Cccd, Sdt, gioiTinh, trangThai,
-                                caLamViec, chucVu, Email, diaChi, maNV);
-                        if (moi == true) {
+                        if (dao.suakhonganh(maBanDau, tenNV, ngaySinhsql, Cccd, Sdt, gioiTinh, trangThai,
+                                caLamViec, chucVu, Email, diaChi, maNV)){
                             xoaTrang();
                             deleteAllDataTable();
                             docDuLieu();
@@ -922,16 +921,22 @@ private static final String URL = "rmi://192.168.1.15:6541/";
     }
 
     private String defaultID() {
-        int n = 0;
         try {
-            n = dao.getAllNV().size() + 1;
+            List<NhanVien> allNV = dao.getAllNV();
+            if (allNV.isEmpty()) {
+                return "NV001";
+            } else {
+                String lastID = allNV.get(allNV.size() - 1).getMaNhanvien(); // Lấy ID của nhân viên cuối cùng
+                String prefix = lastID.substring(0, 2); // Lấy phần chữ của ID
+                int number = Integer.parseInt(lastID.substring(2)); // Lấy phần số của ID
+                number++; // Tăng phần số lên 1
+                String newID = prefix + String.format("%03d", number); // Tạo ID mới
+                return newID;
+            }
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String soLuongNV = String.format("%03d", n);
-        String deFault = "NV" + soLuongNV;
-        return deFault;
+        return null;
     }
 
     private void UpdateComBoBox() {

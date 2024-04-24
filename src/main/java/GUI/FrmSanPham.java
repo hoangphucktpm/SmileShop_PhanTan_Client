@@ -99,7 +99,8 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
     private List<String> listTimNCC = new ArrayList<>();
 //	private KhuyenMaiDao khuyenMaiDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
 
-    private  SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;List<LoaiSanPham> listSP = sanPhamDao.getLoaiSP();
+    private  SanPhamDao sanPhamDao = (SanPhamDao) Naming.lookup(URL + "SanPhamDao");;
+    private List<LoaiSanPham> listSP = sanPhamDao.getLoaiSP();
     private KhuyenMaiDao kmDao = (KhuyenMaiDao) Naming.lookup(URL + "KhuyenMaiDao");
 
 
@@ -133,7 +134,7 @@ public class FrmSanPham extends JFrame implements ActionListener, MouseListener,
     private JLabel lblLoi_Ngay;
     private JLabel lblGiaNhap;
 
-private static final String URL = "rmi://192.168.1.15:6541/";
+private static final String URL = "rmi://172.20.10.5:6541/";
 
 
     /**
@@ -774,35 +775,38 @@ private static final String URL = "rmi://192.168.1.15:6541/";
         try {
             cboChatLieu.setEditable(true);
             String moi = JOptionPane.showInputDialog(this, "Thêm chất liệu mới");
-            String moTa = JOptionPane.showInputDialog(this, "Mô tả");
-            if (moi != null && !moi.equalsIgnoreCase("")) {
-                int n = sanPhamDao.soLuongChatLieu() + 1;
-                String soLuongChatLieu = String.format("%03d", n);
-                String deFault = soLuongChatLieu;
-                ChatLieu chatLieu = new ChatLieu(deFault, moi, moTa);
-                boolean check = sanPhamDao.themChatLieu(chatLieu);
-
-                if (check == true) {
-                    lblLoi.setText("Thêm chất liệu thành công");
-
-                } else
-                    lblLoi.setText("Thêm chất liệu không thành công");
-            } else
+            if (moi == null || moi.equalsIgnoreCase("")) {
                 lblLoi.setText("Thêm chất liệu không thành công");
+                cboChatLieu.setEditable(false);
+                return;
+            }
+            String moTa = JOptionPane.showInputDialog(this, "Mô tả");
+            if (moTa == null) {
+                moTa = ""; // Set mô tả thành chuỗi rỗng nếu người dùng nhấn "Hủy"
+            }
+            int n = sanPhamDao.soLuongChatLieu() + 1;
+            String soLuongChatLieu = String.format("%03d", n);
+            String deFault = soLuongChatLieu;
+            ChatLieu chatLieu = new ChatLieu(deFault, moi, moTa);
+            boolean check = sanPhamDao.themChatLieu(chatLieu);
+
+            if (check) {
+                lblLoi.setText("Thêm chất liệu thành công");
+            } else {
+                lblLoi.setText("Thêm chất liệu không thành công");
+            }
             cboChatLieu.removeAllItems();
-            cboChatLieu.setSelectedItem(moi + "(" + moTa + ")");
+            cboChatLieu.setSelectedItem(moi + (moTa.isEmpty() ? "" : "(" + moTa + ")"));
             listCL = sanPhamDao.getChatLieu();
             for (ChatLieu c : listCL) {
-                cboChatLieu.addItem(c.getTenChatLieu() + "(" + c.getMoTa() + ")");
+                cboChatLieu.addItem(c.getTenChatLieu() + (c.getMoTa().isEmpty() ? "" : "(" + c.getMoTa() + ")"));
             }
             cboChatLieu.setEditable(false);
-
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-
     /**
      * Dùng để mở giao diện thêm đơn vị tính
      */
@@ -1163,6 +1167,8 @@ private static final String URL = "rmi://192.168.1.15:6541/";
     //	cập nhật các comboBox
     public void updateComboBox() throws RemoteException {
 
+            List<NhaCungCap> listNCC = sanPhamDao.getTenNCC();
+            List<ChatLieu> listCL = sanPhamDao.getChatLieu();
             cboLoaiSP.removeAllItems();
             cboChatLieu.removeAllItems();
             cboNhaCungCap.removeAllItems();
@@ -1313,7 +1319,11 @@ private static final String URL = "rmi://192.168.1.15:6541/";
             }
 
         } else if (o.equals(btnLammoi)) {
-            reSet();
+            try {
+                reSet();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
         } else if (o.equals(btnThemLoaiSP)) {
             themLoaiSP();
 
@@ -1345,7 +1355,11 @@ private static final String URL = "rmi://192.168.1.15:6541/";
                     chkSua = false;
                     btnThem.setEnabled(true);
                     btnSua.setIcon(new ImageIcon("Anh\\sua.png"));
-                    reSet();
+                    try {
+                        reSet();
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
 
@@ -1447,7 +1461,7 @@ private static final String URL = "rmi://192.168.1.15:6541/";
     }
 
     //	Làm mới thanh thông tin và bảng
-    public void reSet() {
+    public void reSet() throws RemoteException {
         btnThem.setEnabled(true);
         txtMaSP.setText(deFaultID());
         txtTenSP.setText("");
@@ -1457,6 +1471,7 @@ private static final String URL = "rmi://192.168.1.15:6541/";
         txtChonNgaynhap.setDate(new java.util.Date());
         txtDonGia.setText("");
         txtTenSP.requestFocus();
+        updateComboBox();
         xoaAllDataTable();
         docDuLieu();
     }

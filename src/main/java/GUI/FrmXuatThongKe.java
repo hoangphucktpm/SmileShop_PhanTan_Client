@@ -44,7 +44,7 @@ public class FrmXuatThongKe extends JFrame implements Printable,ActionListener {
 	private JLabel lblNoiDungNgayLap;
 	
 	int count = 0;
-	private static final String URL = "rmi://localhost:6541/";
+	private static final String URL = "rmi://172.20.10.5:6541/";
 
 
 

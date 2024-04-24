@@ -99,7 +99,7 @@ public class    FrmThongKeDoanhThu extends JFrame implements ActionListener {
     private ThongKeDoanhThuDao daoTKDTImpl = (ThongKeDoanhThuDao) Naming.lookup(URL + "ThongKeDoanhThuDao");
 
 
-private static final String URL = "rmi://192.168.1.15:6541/";
+private static final String URL = "rmi://172.20.10.5:6541/";
 
     public static void main(String[] args) {
         try {

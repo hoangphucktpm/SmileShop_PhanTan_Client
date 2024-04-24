@@ -91,7 +91,7 @@ public class FrmXemHoaDon extends JFrame implements ActionListener {
     DecimalFormat tien = new DecimalFormat(",##0");
     List<HoaDon> list = hd_dao.getAllHoaDon();
 
-private static final String URL = "rmi://192.168.1.15:6541/";
+private static final String URL = "rmi://172.20.10.5:6541/";
 
 
     public static void main(String[] args) {
